@@ -3,6 +3,7 @@
  */
 var r          = require("ramda");
 var React      = require("react");
+var api        = require("../../lib/api");
 var reactstate = require("../../lib/reactstate");
 var Comment    = require("../components/comment.jsx");
 
@@ -10,15 +11,46 @@ module.exports = React.createClass({
     mixins: [reactstate.mixin],
 
     getInitialState: function() {
-        return { blarty: this.props.$state.blarty || "harhar!" };
+        console.log(this.props.$state);
+        return {
+            posts: this.props.$state.posts || [],
+            waiting: true
+        };
+    },
+
+    componentDidMount: function() {
+        if (!this.state.posts) {
+            api.getPosts(function(err, posts) {
+                console.log(arguments);
+                if (this.isMounted()) {
+                    this.setState({
+                        posts: posts,
+                        waiting: false
+                    });
+                }
+            }.bind(this));
+        } else {
+            this.setState({ waiting: false });
+        }
     },
 
     render: function() {
+        var posts = r.map(function(post) {
+            var id = r.get("id", post);
+            var title = r.get("title", post);
+
+            return (
+                <li>
+                    <p><a href={ "/post/" + id }>{ title }</a></p>
+                </li>
+            );
+        }, this.state.posts);
+
         return (
             <div>
-                <h1>{ this.state.blarty }</h1>
+                <h1>Posts</h1>
                 <hr />
-                <a href="/signup">Sign Up&#33;&#33;&#33;</a>
+                <ul>{ posts }</ul>
             </div>
         );
     }
