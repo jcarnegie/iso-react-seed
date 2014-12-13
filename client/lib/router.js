@@ -28,31 +28,36 @@ var create = function() {
 /**
  * Public interface
  */
-var add = function(routes, routeUrl, fn) {
+var add = function(routes, routeUrl, component, fn) {
     var copy = r.cloneDeep(routes);
 
     copy.routes.push({
         matcher: makeRouteRegexp(routeUrl),
         paramNames: getRouteParamNames(routeUrl),
         routeUrl: routeUrl,
+        component: component,
         fn: fn
     });
 
     return copy;
 };
 
+var find = function(routes, path) {
+    var matches = function(route) {
+        return path.match(route.matcher);
+    };
+
+    return r.find(matches, routes.routes);
+}
+
 /**
  * Public interface
  */
-var match = function(routes, uri) {
-    var matches = function(route) {
-        return uri.match(route.matcher);
-    };
-
-    var route = r.find(matches, routes.routes);
+var match = function(routes, path) {
+    var route = find(routes, path);
 
     if (route) {
-        var matches = uri.match(route.matcher);
+        var matches = path.match(route.matcher);
         var params = r.zipObj(route.paramNames, r.tail(matches));
         route.fn(route, params);
     }
@@ -64,11 +69,15 @@ var match = function(routes, uri) {
  * Public interface
  */
 var reactPageAction = r.curry(function(containerSelector, component) {
+    return reactPageActionWithState(null, containerSelector, component);
+});
+
+var reactPageActionWithState = r.curry(function(state, containerSelector, component) {
     return function(route, params) { 
         var context = {
             params: params,
             query: querystring.parse(window.location.search),
-            state: (typeof $state === "object") ? $state : {}
+            state: state || {}
         };
 
         var element = react.createFactory(component);
@@ -84,7 +93,7 @@ var reactPageAction = r.curry(function(containerSelector, component) {
 var configureRoute = r.curry(function(pageActionFn, routes, route) {
     var path      = r.get("path", route);
     var component = r.get("component", route);
-    return add(routes, path, pageActionFn(component));
+    return add(routes, path, component, pageActionFn(component));
 });
 
 /**
@@ -117,10 +126,28 @@ var handlePopState = r.curry(function(routes, e) {
 /**
  * Public interface
  */
+var init = r.curry(function(routes, containerSelector, url, e) {
+    var parsedUrl = urlUtil.parse(url);
+    var path = parsedUrl.pathname + (parsedUrl.search || "");
+    var route = find(routes, path);
+
+    if (route) {
+        var matches = path.match(route.matcher);
+        var params  = r.zipObj(route.paramNames, r.tail(matches));
+        var state   = (typeof $state === "object") ? $state : {};
+        var action  = reactPageActionWithState(state, containerSelector, path);
+        action(route, params);
+    }
+});
+
+/**
+ * Public interface
+ */
 module.exports = {
     create: create,
     add: add,
     match: match,
+    init: init,
     reactPageAction: reactPageAction,
     configureRoute: configureRoute,
     handleClicks: handleClicks,

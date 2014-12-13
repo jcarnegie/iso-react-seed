@@ -10,18 +10,7 @@ module.exports = React.createClass({
     mixins: [reactstate.mixin],
 
     getInitialState: function() {
-        if (this.props.$state.post) {
-            state = {
-                post: this.props.$state.post,
-                waiting: false
-            }
-        } else {
-            state = {
-                post: null,
-                waiting: true
-            }
-        }
-        return state;
+        return { post: this.props.$state.post };
     },
 
     componentDidMount: function () {
@@ -39,12 +28,12 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        var body;
+        var contents;
 
-        if (this.state.waiting || !this.state.post) {
-            body = ( <div className="loader" /> );
+        if (!this.state.post) {
+            contents = ( <div className="loader" /> );
         } else {
-            body = (
+            contents = (
                 <div>
                     <h1>{ this.state.post.title }</h1>
                     <p>{ this.state.post.body }</p>
@@ -52,6 +41,11 @@ module.exports = React.createClass({
             );
         }
 
-        return ( <div>{ body }</div> );
+        return (
+            <div>
+                <a href="/">&lt;&lt; All Posts</a>
+                { contents }
+            </div>
+        );
     }
 });

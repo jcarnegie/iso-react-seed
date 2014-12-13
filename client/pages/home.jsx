@@ -11,26 +11,18 @@ module.exports = React.createClass({
     mixins: [reactstate.mixin],
 
     getInitialState: function() {
-        console.log(this.props.$state);
         return {
             posts: this.props.$state.posts || [],
-            waiting: true
         };
     },
 
     componentDidMount: function() {
-        if (!this.state.posts) {
-            api.getPosts(function(err, posts) {
-                console.log(arguments);
+        if (this.state.posts.length === 0) {
+            api.getPosts(0, 10, function(err, posts) {
                 if (this.isMounted()) {
-                    this.setState({
-                        posts: posts,
-                        waiting: false
-                    });
+                    this.setState({ posts: posts });
                 }
             }.bind(this));
-        } else {
-            this.setState({ waiting: false });
         }
     },
 
@@ -40,18 +32,24 @@ module.exports = React.createClass({
             var title = r.get("title", post);
 
             return (
-                <li>
+                <li key={ id }>
                     <p><a href={ "/post/" + id }>{ title }</a></p>
                 </li>
             );
         }, this.state.posts);
 
-        return (
-            <div>
-                <h1>Posts</h1>
-                <hr />
-                <ul>{ posts }</ul>
-            </div>
-        );
+        var contents = null;
+
+        if (this.state.posts.length > 0) {
+            return (
+                <div>
+                    <h1>Posts</h1>
+                    <hr />
+                    <ul>{ posts }</ul>
+                </div>
+            );
+        } else {
+            return ( <div className="loader" /> );
+        }
     }
 });

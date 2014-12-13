@@ -9,7 +9,8 @@ var routesList  = require("./routes");
 var urlUtil     = require("url");
 var querystring = require("querystring");
 
-var pageAction = router.reactPageAction("#page");
+var selector   = "#page";
+var pageAction = router.reactPageAction(selector);
 
 // setup routing
 var routes = r.reduce(router.configureRoute(pageAction), router.create(), routesList);
@@ -21,3 +22,6 @@ document.addEventListener("click", router.handleClicks(routes));
 
 // popstate stuff (back button, etc)
 window.onpopstate = router.handlePopState(routes);
+
+// init
+document.onload = router.init(routes, selector, window.location.href);
