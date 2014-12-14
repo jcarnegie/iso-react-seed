@@ -1,11 +1,11 @@
 
-var api    = require("../lib/api");
+var api    = require("./lib/api");
 var Home   = require("./pages/home.jsx");
 var Post   = require("./pages/post.jsx");
 var Signup = require("./pages/signup.jsx");
 
 /**
- * List of routes. Each route has these parameters:
+ * List of routes. Each route has these properties:
  *
  * - path
  * - component

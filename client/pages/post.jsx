@@ -1,9 +1,9 @@
 /**
  * @jsx React.DOM
  */
-var api        = require("../../lib/api");
+var api        = require("../lib/api");
 var React      = require("react");
-var reactstate = require("../../lib/reactstate");
+var reactstate = require("../lib/reactstate");
 
 module.exports = React.createClass({
 

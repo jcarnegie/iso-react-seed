@@ -1,5 +1,5 @@
 var r       = require("ramda");
-var env     = require("./env");
+var env     = require("../../lib/env");
 var request = require("superagent");
 var config  = env.config();
 
