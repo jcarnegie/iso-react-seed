@@ -26,9 +26,7 @@ module.exports = [
         // we change it so that all API methods return a promise.
         // that's probably a better functional approach.
         state: function(context, done) {
-            api.getPosts(0, 10, function(err, data) {
-                done(null, { posts: data });
-            });
+            api.getPosts(0, 10, done);
         }
     },
     {
@@ -39,9 +37,7 @@ module.exports = [
         path: "/post/:id",
         component: Post,
         state: function(context, done) {
-            api.getPost(context.params.id, function(err, data) {
-                done(err, { post: data });
-            });
+            api.getPost(context.params.id, done);
         }
     }
 ];

@@ -18,10 +18,7 @@ module.exports = React.createClass({
             var id = this.context.params.id;
             api.getPost(id, function(err, post) {
                 if (!err && this.isMounted()) {
-                    this.setState({
-                        post: post,
-                        waiting: false
-                    });
+                    this.setState(post);
                 }
             }.bind(this));
         }  

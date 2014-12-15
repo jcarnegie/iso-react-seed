@@ -17,11 +17,15 @@ var get = function(path, done) {
 
 var getPosts = function(offset, count, done) {
     var path = "/api/posts?offset=" + offset + "&count=" + count;
-    get(path, done);    
+    get(path, function(err, posts) {
+        done(err, { posts: posts });
+    });
 };
 
 var getPost = function(postId, done) {
-    get("/api/post/" + postId, done);
+    get("/api/post/" + postId, function(err, post) {
+        done(err, { post: post });
+    });
 };
 
 module.exports = {
