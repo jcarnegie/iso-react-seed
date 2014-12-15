@@ -1,6 +1,7 @@
 var r       = require("ramda");
 var env     = require("../../lib/env");
 var request = require("superagent");
+var promise = require("es6-promise").Promise;
 var config  = env.config();
 
 var apiUrl = function(path) {

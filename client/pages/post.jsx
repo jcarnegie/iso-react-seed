@@ -1,7 +1,7 @@
 /**
  * @jsx React.DOM
  */
-var api        = require("../lib/api");
+var api        = require("../lib/apiclient");
 var React      = require("react");
 var reactstate = require("../lib/reactstate");
 

@@ -27,6 +27,7 @@
     "uid-safe": "^1.0.1",
     "webpack": "^1.4.13",
     "url": "~0.10.1",
-    "querystring": "~0.2.0"
+    "querystring": "~0.2.0",
+    "es6-promise": "~2.0.1"
   }
 }

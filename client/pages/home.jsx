@@ -3,7 +3,7 @@
  */
 var r          = require("ramda");
 var React      = require("react");
-var api        = require("../lib/api");
+var api        = require("../lib/apiclient");
 var reactstate = require("../lib/reactstate");
 var Comment    = require("../components/comment.jsx");
 

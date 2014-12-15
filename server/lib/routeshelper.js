@@ -21,7 +21,7 @@ var reactRouteHandler = function(layout, pageComponent, asyncStateFn) {
             query: req.query
         };
 
-        asyncStateFn(requestContext, function(state) {
+        asyncStateFn(requestContext, function(err, state) {
             var renderContext = {
                 reqId: req._id,
                 state: state
