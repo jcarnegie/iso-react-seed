@@ -1,6 +1,7 @@
 /**
  * @jsx React.DOM
  */
+var r          = require("ramda");
 var api        = require("../lib/apiclient");
 var React      = require("react");
 var reactstate = require("../lib/reactstate");
@@ -13,36 +14,33 @@ module.exports = React.createClass({
         return { post: this.props.$state.post };
     },
 
-    componentDidMount: function () {
-        if ( !this.state.post ) {
-            var id = this.context.params.id;
-            api.getPost(id, function(err, post) {
-                if (!err && this.isMounted()) {
-                    this.setState(post);
-                }
-            }.bind(this));
-        }  
+    loaderMarkup: function() {
+        return ( <div className="loader" /> );
+    },
+
+    needsState: function() {
+        return !this.state.post;
+    },
+
+    loadAsync: function () {
+        var id = this.context.params.id;
+        var p  = api.getPost(id);
+        this.setStateAsync("post", p).catch(function(err) {
+            // do some error handling
+        });
     },
 
     render: function() {
-        var contents;
-
-        if (!this.state.post) {
-            contents = ( <div className="loader" /> );
-        } else {
-            contents = (
+        return this.withLoader(function() {
+            return (
                 <div>
-                    <h1>{ this.state.post.title }</h1>
-                    <p>{ this.state.post.body }</p>
+                    <a href="/">&lt;&lt; All Posts</a>
+                    <div>
+                        <h1>{ this.state.post.title }</h1>
+                        <p>{ this.state.post.body }</p>
+                    </div>
                 </div>
             );
-        }
-
-        return (
-            <div>
-                <a href="/">&lt;&lt; All Posts</a>
-                { contents }
-            </div>
-        );
+        });
     }
 });

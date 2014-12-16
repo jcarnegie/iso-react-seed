@@ -18,9 +18,9 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         if (this.state.posts.length === 0) {
-            api.getPosts(0, 10, function(err, posts) {
-                if (this.isMounted() && !err) {
-                    this.setState(posts);
+            api.getPosts().then(function(posts) {
+                if (this.isMounted()) {
+                    this.setState({ posts: posts });
                 }
             }.bind(this));
         }

@@ -1,8 +1,9 @@
 
-var api    = require("./lib/apiclient");
-var Home   = require("./pages/home.jsx");
-var Post   = require("./pages/post.jsx");
-var Signup = require("./pages/signup.jsx");
+var Promise = require("es6-promise").Promise;
+var api     = require("./lib/apiclient");
+var Home    = require("./pages/home.jsx");
+var Post    = require("./pages/post.jsx");
+var Signup  = require("./pages/signup.jsx");
 
 /**
  * List of routes. Each route has these properties:
@@ -25,8 +26,10 @@ module.exports = [
         // context and done are automatically passed in, or maybe
         // we change it so that all API methods return a promise.
         // that's probably a better functional approach.
-        state: function(context, done) {
-            api.getPosts(0, 10, done);
+        state: function(context) {
+            return api.getPosts().then(function(posts) {
+                return { posts: posts };
+            });
         }
     },
     {
@@ -37,7 +40,9 @@ module.exports = [
         path: "/post/:id",
         component: Post,
         state: function(context, done) {
-            api.getPost(context.params.id, done);
+            return api.getPost(context.params.id).then(function(post) {
+                return { post: post };
+            });
         }
     }
 ];

@@ -21,7 +21,7 @@ var reactRouteHandler = function(layout, pageComponent, asyncStateFn) {
             query: req.query
         };
 
-        asyncStateFn(requestContext, function(err, state) {
+        asyncStateFn(requestContext).then(function(state) {
             var renderContext = {
                 reqId: req._id,
                 state: state
@@ -38,6 +38,7 @@ var reactRouteHandler = function(layout, pageComponent, asyncStateFn) {
                 body: markup,
                 title: ""
             });
+
             res.send(html);
         });
     }
