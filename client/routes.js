@@ -1,9 +1,19 @@
-
+var r       = require("ramda");
 var Promise = require("es6-promise").Promise;
 var api     = require("./lib/apiclient");
 var Home    = require("./pages/home.jsx");
 var Post    = require("./pages/post.jsx");
 var Signup  = require("./pages/signup.jsx");
+
+var loadAsProp = r.curry(function(prop, fn, context) {
+    console.log("prop: " + prop);
+    console.log(fn.toString());
+    return fn(context).then(function(data) {
+        var result = {};
+        result[prop] = data;
+        return result;
+    })
+});
 
 /**
  * List of routes. Each route has these properties:
@@ -19,18 +29,7 @@ module.exports = [
     {
         path: "/",
         component: Home,
-
-        // Todo: create some sugar to make this more config-like
-        // something like:
-        //     state: api.getPosts
-        // context and done are automatically passed in, or maybe
-        // we change it so that all API methods return a promise.
-        // that's probably a better functional approach.
-        state: function(context) {
-            return api.getPosts().then(function(posts) {
-                return { posts: posts };
-            });
-        }
+        state: loadAsProp("posts", api.getPosts)
     },
     {
         path: "/signup",
@@ -39,10 +38,6 @@ module.exports = [
     {
         path: "/post/:id",
         component: Post,
-        state: function(context, done) {
-            return api.getPost(context.params.id).then(function(post) {
-                return { post: post };
-            });
-        }
+        state: loadAsProp("post", api.getPost)
     }
 ];

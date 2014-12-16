@@ -23,8 +23,7 @@ module.exports = React.createClass({
     },
 
     loadAsync: function () {
-        var id = this.context.params.id;
-        var p  = api.getPost(id);
+        var p  = api.getPost(this.context);
         this.setStateAsync("post", p).catch(function(err) {
             // do some error handling
         });

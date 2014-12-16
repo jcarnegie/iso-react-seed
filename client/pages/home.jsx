@@ -16,14 +16,17 @@ module.exports = React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        if (this.state.posts.length === 0) {
-            api.getPosts().then(function(posts) {
-                if (this.isMounted()) {
-                    this.setState({ posts: posts });
-                }
-            }.bind(this));
-        }
+    loaderMarkup: function() {
+        return ( <div className="loader" /> );
+    },
+
+    needsState: function() {
+        return this.state.posts.length === 0;
+    },
+
+    loadAsync: function() {
+        var p = api.getPosts(this.context);
+        this.setStateAsync("posts", p);
     },
 
     render: function() {
@@ -40,7 +43,7 @@ module.exports = React.createClass({
 
         var contents = null;
 
-        if (this.state.posts.length > 0) {
+        return this.withLoader(function() {
             return (
                 <div>
                     <h1>Posts</h1>
@@ -48,8 +51,6 @@ module.exports = React.createClass({
                     <ul>{ posts }</ul>
                 </div>
             );
-        } else {
-            return ( <div className="loader" /> );
-        }
+        });
     }
 });

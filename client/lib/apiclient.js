@@ -8,13 +8,6 @@ var apiUrl = function(path) {
     return env.config().api.base + path;
 };
 
-// var get = function(path, done) {
-//     request.get(apiUrl(path), function(err, res) {
-//         if (err) return done(err);
-//         done(null, res.body);
-//     });
-// };
-
 var get = function(path, prop) {
     return new Promise(function(resolve, reject) {
         request.get(apiUrl(path), function(err, res) {
@@ -24,15 +17,16 @@ var get = function(path, prop) {
     });
 };
 
-var getPosts = function(offset, count) {
-    offset = offset || 0;
-    count  = count || 10;
+var getPosts = function(context) {
+    offset = context.query.offset || 0;
+    count  = context.query.count || 10;
     var path = "/api/posts?offset=" + offset + "&count=" + count;
     return get(path);
 };
 
-var getPost = function(postId, done) {
-    return get("/api/post/" + postId);
+var getPost = function(context) {
+    var id = context.params.id;
+    return get("/api/post/" + id);
 };
 
 module.exports = {
