@@ -27,7 +27,7 @@ module.exports = [
         entry: "./client/main.js",
 
         output: {
-            path: path.join(__dirname, "dist", "client", "js"),
+            path: path.join(__dirname, "dist", "public", "js"),
             filename: "app.js",
             publicPath: "/js"
         },

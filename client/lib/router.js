@@ -3,6 +3,11 @@ var react       = require("react");
 var urlUtil     = require("url");
 var querystring = require("querystring");
 
+/**
+ * [makeRouteRegexp description]
+ * @param  {[type]} routeUrl [description]
+ * @return {[type]}          [description]
+ */
 var makeRouteRegexp = function(routeUrl) {
     return new RegExp("^" + routeUrl.replace(/:[^\/]+/g, "([^\/]+)") + "$");
 };
@@ -17,7 +22,8 @@ var getRouteParamNames = function(routeUrl) {
 };
 
 /**
- * Public interface
+ * [create description]
+ * @return {[type]} [description]
  */
 var create = function() {
     return {
@@ -26,7 +32,11 @@ var create = function() {
 };
 
 /**
- * Public interface
+ * [add description]
+ * @param {[type]}   routes    [description]
+ * @param {[type]}   routeUrl  [description]
+ * @param {[type]}   component [description]
+ * @param {Function} fn        [description]
  */
 var add = function(routes, routeUrl, component, fn) {
     var copy = r.cloneDeep(routes);
@@ -42,6 +52,12 @@ var add = function(routes, routeUrl, component, fn) {
     return copy;
 };
 
+/**
+ * [find description]
+ * @param  {[type]} routes [description]
+ * @param  {[type]} path   [description]
+ * @return {[type]}        [description]
+ */
 var find = function(routes, path) {
     var matches = function(route) {
         return path.match(route.matcher);
@@ -51,7 +67,10 @@ var find = function(routes, path) {
 }
 
 /**
- * Public interface
+ * [match description]
+ * @param  {[type]} routes [description]
+ * @param  {[type]} path   [description]
+ * @return {[type]}        [description]
  */
 var match = function(routes, path) {
     var route = find(routes, path);
@@ -66,12 +85,22 @@ var match = function(routes, path) {
 };
 
 /**
- * Public interface
+ * [description]
+ * @param  {[type]} containerSelector [description]
+ * @param  {[type]} component)        {               return reactPageActionWithState(null, containerSelector, component);} [description]
+ * @return {[type]}                   [description]
  */
 var reactPageAction = r.curry(function(containerSelector, component) {
     return reactPageActionWithState(null, containerSelector, component);
 });
 
+/**
+ * [description]
+ * @param  {[type]} state             [description]
+ * @param  {[type]} containerSelector [description]
+ * @param  {Object} component)        {               return function(route, params) {         var context [description]
+ * @return {[type]}                   [description]
+ */
 var reactPageActionWithState = r.curry(function(state, containerSelector, component) {
     return function(route, params) { 
         var context = {
@@ -88,7 +117,11 @@ var reactPageActionWithState = r.curry(function(state, containerSelector, compon
 });
 
 /**
- * Public interface
+ * [description]
+ * @param  {[type]} pageActionFn [description]
+ * @param  {[type]} routes       [description]
+ * @param  {[type]} route)       {               var path [description]
+ * @return {[type]}              [description]
  */
 var configureRoute = r.curry(function(pageActionFn, routes, route) {
     var path      = r.get("path", route);
@@ -97,7 +130,12 @@ var configureRoute = r.curry(function(pageActionFn, routes, route) {
 });
 
 /**
- * Public interface
+ * [description]
+ * @param  {[type]} routes          [description]
+ * @param  {[type]} e)              {                                                               if (e.target.localName ! [description]
+ * @param  {[type]} route.pageTitle ||            document.title [description]
+ * @param  {[type]} path);                                                     }} [description]
+ * @return {[type]}                 [description]
  */
 var handleClicks = r.curry(function(routes, e) {
     // ignore clicks to elements other than <a>'s
@@ -115,7 +153,10 @@ var handleClicks = r.curry(function(routes, e) {
 });
 
 /**
- * Public interface
+ * [description]
+ * @param  {[type]} routes [description]
+ * @param  {[type]} e)     {               var parsedUrl [description]
+ * @return {[type]}        [description]
  */
 var handlePopState = r.curry(function(routes, e) {
     var parsedUrl = urlUtil.parse(window.location.href);
@@ -124,7 +165,12 @@ var handlePopState = r.curry(function(routes, e) {
 });
 
 /**
- * Public interface
+ * [description]
+ * @param  {[type]} routes            [description]
+ * @param  {[type]} containerSelector [description]
+ * @param  {[type]} url               [description]
+ * @param  {[type]} e)                {               var parsedUrl [description]
+ * @return {[type]}                   [description]
  */
 var init = r.curry(function(routes, containerSelector, url, e) {
     var parsedUrl = urlUtil.parse(url);
@@ -141,7 +187,8 @@ var init = r.curry(function(routes, containerSelector, url, e) {
 });
 
 /**
- * Public interface
+ * [exports description]
+ * @type {Object}
  */
 module.exports = {
     create: create,

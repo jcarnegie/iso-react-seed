@@ -2,10 +2,10 @@
 require("./assets/app.styl");
 
 var r           = require("ramda");
-var env         = require("../lib/env");
 var react       = require("react");
-var router      = require("./lib/router");
+var isoreact    = require("isoreact");
 var routesList  = require("./routes");
+var router      = require("./lib/router");
 var urlUtil     = require("url");
 var querystring = require("querystring");
 

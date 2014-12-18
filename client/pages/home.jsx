@@ -4,11 +4,11 @@
 var r          = require("ramda");
 var React      = require("react");
 var api        = require("../lib/apiclient");
-var reactstate = require("../lib/reactstate");
+var isoreact   = require("isoreact");
 var Comment    = require("../components/comment.jsx");
 
 module.exports = React.createClass({
-    mixins: [reactstate.mixin],
+    mixins: [isoreact.mixin],
 
     getInitialState: function() {
         return {
