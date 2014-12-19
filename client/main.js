@@ -8,12 +8,14 @@ var routesList  = require("./routes");
 var router      = require("./lib/router");
 var urlUtil     = require("url");
 var querystring = require("querystring");
+var App         = require("./layouts/app.jsx");
 
-var selector   = "#page";
+// var selector   = "#page";
+var selector = "body";
 var pageAction = router.reactPageAction(selector);
 
 // setup routing
-var routes = r.reduce(router.configureRoute(pageAction), router.create(), routesList);
+var routes = r.reduce(router.configureRoute(pageAction, App), router.create(), routesList);
 
 // route clicks
 // todo: explore if this will be a performance issue - do we need to hook all

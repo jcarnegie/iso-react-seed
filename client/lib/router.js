@@ -90,12 +90,8 @@ var match = function(routes, path) {
  * @param  {[type]} component)        {               return reactPageActionWithState(null, containerSelector, component);} [description]
  * @return {[type]}                   [description]
  */
-var reactPageAction = r.curry(function(containerSelector, component) {
-    return reactPageActionWithState(null, containerSelector, component);
-});
-
-var reactPageActionWithLayout = r.curry(function(containerSelector, layout, component) {
-    return reactPageActionWithState(null, containerSelector, component);
+var reactPageAction = r.curry(function(containerSelector, layout, component) {
+    return reactPageActionWithState(null, containerSelector, layout, component);
 });
 
 /**
@@ -105,22 +101,7 @@ var reactPageActionWithLayout = r.curry(function(containerSelector, layout, comp
  * @param  {Object} component)        {               return function(route, params) {         var context [description]
  * @return {[type]}                   [description]
  */
-var reactPageActionWithState = r.curry(function(state, containerSelector, component) {
-    return function(route, params) { 
-        var context = {
-            params: params,
-            query: querystring.parse(window.location.search),
-            state: state || {}
-        };
-
-        var element = react.createFactory(component);
-        var conextualElement = react.withContext(context, function() { return element(context); });
-        var domElement = document.querySelector(containerSelector);
-        react.render(conextualElement, domElement);
-    }
-});
-
-var reactPageActionWithStateAndLayout = r.curry(function(state, containerSelector, layout, component) {
+var reactPageActionWithState = r.curry(function(state, containerSelector, layout, component) {
     return function(route, params) { 
         var context = {
             params: params,
@@ -134,6 +115,10 @@ var reactPageActionWithStateAndLayout = r.curry(function(state, containerSelecto
         var props = { body: component };
         var conextualElement = react.withContext(context, function() { return element(props); });
         var domElement = document.querySelector(containerSelector);
+
+        console.log("rendering react component to: ");
+        console.log(domElement);
+
         react.render(conextualElement, domElement);
     }
 });
@@ -145,13 +130,7 @@ var reactPageActionWithStateAndLayout = r.curry(function(state, containerSelecto
  * @param  {[type]} route)       {               var path [description]
  * @return {[type]}              [description]
  */
-var configureRoute = r.curry(function(pageActionFn, routes, route) {
-    var path      = r.get("path", route);
-    var component = r.get("component", route);
-    return add(routes, path, component, pageActionFn(component));
-});
-
-var configureRouteWithLayout = r.curry(function(pageActionFn, defaultLayout, routes, route) {
+var configureRoute = r.curry(function(pageActionFn, defaultLayout, routes, route) {
     var path      = r.get("path", route);
     var component = r.get("component", route);
     var layout    = r.get("layout", route) || defaultLayout;
