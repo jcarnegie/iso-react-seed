@@ -6,8 +6,9 @@ var isoreact        = require("isoreact");
 var routeList       = require("./routes");
 var clientRouteList = require("../client/routes");
 var routeshelper    = require("./lib/routeshelper");
+var htmlComponent   = require("../client/layouts/html.jsx");
 var defaultLayout   = require("../client/layouts/app.jsx");
-var htmlTemplate    = require("../client/layouts/app.html.mustache");
+// var htmlTemplate    = require("../client/layouts/app.html.mustache");
 
 var serverroutes = isoreact.serverroutes;
 var config       = isoreact.config;
@@ -21,7 +22,7 @@ app.use(express.static("dist/public"));
 
 // configure server-side api + client routes
 serverroutes.setServerRoutes(app, routeList);
-serverroutes.setClientRoutes(app, clientRouteList, htmlTemplate, defaultLayout);
+serverroutes.setClientRoutes(app, clientRouteList, htmlComponent, defaultLayout);
 
 app.listen(3000, function() {
     console.log("listening on 3000");

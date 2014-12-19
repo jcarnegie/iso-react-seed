@@ -10,7 +10,6 @@ var urlUtil     = require("url");
 var querystring = require("querystring");
 var App         = require("./layouts/app.jsx");
 
-// var selector   = "#page";
 var selector = "body";
 var pageAction = router.reactPageAction(selector);
 
