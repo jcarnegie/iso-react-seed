@@ -8,7 +8,6 @@ var clientRouteList = require("../client/routes");
 var routeshelper    = require("./lib/routeshelper");
 var htmlComponent   = require("../client/layouts/html.jsx");
 var defaultLayout   = require("../client/layouts/app.jsx");
-// var htmlTemplate    = require("../client/layouts/app.html.mustache");
 
 var serverroutes = isoreact.serverroutes;
 var config       = isoreact.config;
