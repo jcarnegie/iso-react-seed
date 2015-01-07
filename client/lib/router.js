@@ -102,24 +102,19 @@ var reactPageAction = r.curry(function(containerSelector, layout, component) {
  * @return {[type]}                   [description]
  */
 var reactPageActionWithState = r.curry(function(state, containerSelector, layout, component) {
-    return function(route, params) { 
+    return function(route, params) {
         var context = {
             params: params,
             query: querystring.parse(window.location.search),
             state: state || {}
         };
 
-        var element = react.createFactory(layout);
-        // does element need context passed in? i.e. element(context)?
-        // var conextualElement = react.withContext(context, function() { return element(context); });
-        var props = { body: component };
-        var conextualElement = react.withContext(context, function() { return element(props); });
-        var domElement = document.querySelector(containerSelector);
-
-        console.log("rendering react component to: ");
-        console.log(domElement);
-
-        react.render(conextualElement, domElement);
+        react.withContext(context, function() {
+            var element = react.createFactory(layout);
+            var props = { body: react.createFactory(component), context: context };
+            var domElement = document.querySelector(containerSelector);
+            react.render(element(props), domElement);
+        });
     }
 });
 
