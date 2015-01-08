@@ -110,8 +110,11 @@ var reactPageActionWithState = r.curry(function(state, containerSelector, layout
         };
 
         react.withContext(context, function() {
-            var element = react.createFactory(layout);
-            var props = { body: react.createFactory(component), context: context };
+            var props = {
+                body: react.createFactory(component),
+                $context: context
+            };
+            var element    = react.createFactory(layout);
             var domElement = document.querySelector(containerSelector);
             react.render(element(props), domElement);
         });
